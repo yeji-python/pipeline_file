@@ -34,7 +34,7 @@ pipeline {
         stage("maven打包和发布"){
             agent { label 'master'}
             steps{
-               sh "mvn clean package toolkit:deploy -DskipTests=true -Dedas_config=$env-edas-config.yaml"  
+                sh "mvn clean package toolkit:deploy -DskipTests=true -Dedas_config=${params.env}-edas-config.yaml"  
             }
         }
     }
