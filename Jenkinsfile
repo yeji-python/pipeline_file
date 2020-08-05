@@ -7,10 +7,11 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
     }
     parameters {            //声明构建所需变量
+        string(name: 'BRANCH', defaultValue: 'staging', description: '请输入git分支')
         choice(name: 'env', choices: ['uat', 'prod'], description: '请选择需要构建环境')
         gitParameter(branchFilter: 'origin/(.*)',
                      defaultValue: 'master', 
-                     name: 'BRANCH', 
+                     name: 'branch', 
                      type: 'PT_BRANCH_TAG', 
                      selectedValue: 'DEFAULT', 
                      sortMode: 'DESCENDING_SMART', 
