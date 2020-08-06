@@ -24,8 +24,8 @@ pipeline {
 
         stage("选择发布的项目") {
 //            agent { label 'master && ceshi'}
-            parallel {
-                steps {
+            steps {
+                parallel {
                     script {
                         for (p_name in select.tokenize(',')){
                             def job_name = p_name.tokenize('"')[0]
