@@ -1,5 +1,5 @@
 pipeline {
-    agent none               //全局必须带有agent表明此pipeline执行节点
+    agent any              //全局必须带有agent表明此pipeline执行节点
     tools {
         maven 'maven_home'
     }
@@ -23,7 +23,7 @@ pipeline {
     stages{
 
         stage("选择发布的项目") {
-            agent { label 'master && ceshi'}
+//            agent { label 'master && ceshi'}
             steps {
                 script {
                     for (p_name in select.tokenize(',')){
