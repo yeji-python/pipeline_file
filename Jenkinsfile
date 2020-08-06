@@ -23,7 +23,7 @@ pipeline {
     stages{
 
         stage("选择发布的项目") {
-            agent { label 'master'}
+            agent { label 'master && ceshi'}
             steps {
                 script {
                     for (p_name in select.tokenize(',')){
