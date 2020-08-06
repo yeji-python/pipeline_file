@@ -26,18 +26,37 @@ pipeline {
 //            agent { label 'master && ceshi'}
             steps {
                 script {
+                    def branches = [:]
+                    MAX_CONCURRENT = 4
+                    latch = new java.util.concurrent.LinkedBlockingDeque(MAX_CONCURRENT)
+                    for(int i=0; i<MAX_CONCURRENT; i++)
+                        latch.offer("$i")
                     for (p_name in select.tokenize(',')){
                         def job_name = p_name.tokenize('"')[0]
                         echo "选择的项目为:" + job_name
                         echo "当前分支为:" + params.BRANCH
                         echo "当前环境为:" + params.env
-//                        parallel {
-                            stage('当前执行工程:' + job_name){
-                                build(job: job_name, propagate: false, parameters: [gitParameter(name: 'BRANCH', value: params.BRANCH), string(name: 'env', value: params.env)])
+                        branches[name] = {
+                            def thing = null
+                            waitUntil {
+                                //获取一个资源
+                                thing = latch.pollFirst();
+                                return thing != null
+                            }
+                        }
+                            try {
+                                stage('当前执行工程:' + job_name){
+                                    build(job: job_name, propagate: false, parameters: [gitParameter(name: 'BRANCH', value: params.BRANCH), string(name: 'env', value: params.env)])
 //                          [$class: 'GitParameterValue', name: 'BRANCH', value: '${params.BRANCH}']
 //                          parameters: [choice(name: 'env', value: '${params.env}')]     
+                                }
                             }
-//                        }            
+                            finally {
+                                latch.offer(thing)
+                            }
+                    }
+                    timestamps {
+                        parallel branches
                     }
                 }
             }
