@@ -36,7 +36,7 @@ pipeline {
                         echo "选择的项目为:" + job_name
                         echo "当前分支为:" + params.BRANCH
                         echo "当前环境为:" + params.env
-                        branches[name] = {
+                        branches[job_name] = {
                             def thing = null
                             waitUntil {
                                 //获取一个资源
