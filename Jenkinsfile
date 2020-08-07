@@ -43,7 +43,6 @@ pipeline {
                                 thing = latch.pollFirst();
                                 return thing != null
                             }
-                        }
                             try {
                                 stage('当前执行工程:' + job_name){
                                     build(job: job_name, propagate: false, parameters: [gitParameter(name: 'BRANCH', value: params.BRANCH), string(name: 'env', value: params.env)])
@@ -54,6 +53,7 @@ pipeline {
                             finally {
                                 latch.offer(thing)
                             }
+                        }
                     }
                     timestamps {
                         parallel branches
