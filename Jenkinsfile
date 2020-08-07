@@ -83,4 +83,13 @@ pipeline {
 //            }
 //        }
     }
+
+    post {
+        success {
+            echo 'pipeline post success!!!'
+        }
+        failure {
+            echo 'pipeline post failure!!!'
+        }
+    }
 }
